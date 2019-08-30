@@ -145,6 +145,11 @@ parts:
     build-packages:
       - docker.io
       - cpio
+      - qemu-utils
+      - mount
+      - parted
+      - e2fsprogs
+      - gcc
     override-build: |
       yq=$(realpath ../../yq/build/yq)
       pkg_name=osbuilder
@@ -181,7 +186,8 @@ parts:
       git clone -b ${SNAPCRAFT_PROJECT_VERSION} https://github.com/kata-containers/${pkg_name} ${pkg_gopath}
       cd ${pkg_gopath}
 
-      sudo -E PATH=$PATH make AGENT_VERSION=${SNAPCRAFT_PROJECT_VERSION} DISTRO=clearlinux AGENT_INIT=yes USE_DOCKER=1 image
+      sudo -E PATH=$PATH make AGENT_VERSION=${SNAPCRAFT_PROJECT_VERSION} DISTRO=clearlinux AGENT_INIT=yes USE_DOCKER=1 rootfs
+      sudo -E PATH=$PATH make AGENT_VERSION=${SNAPCRAFT_PROJECT_VERSION} DISTRO=clearlinux AGENT_INIT=yes image
 
       kata_image_dir=${SNAPCRAFT_PART_INSTALL}/usr/share/kata-containers
       mkdir -p ${kata_image_dir}
